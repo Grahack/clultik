@@ -2,46 +2,82 @@ var audioContext = null;
 var unlocked = false;
 var isPlaying = false;      // Are we currently playing?
 var startTime;              // The start time of the entire sequence.
-var current16thNote;        // What note is currently last scheduled?
-var tempo = 120.0;          // tempo (in beats per minute)
+var currentTick = 0;        // What tick is currently last scheduled?
+var tempo = 60.0;           // tempo (in beats per minute)
 var lookahead = 25.0;       // How frequently to call scheduling function 
                             //(in milliseconds)
 var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
                             // This is calculated from lookahead, and overlaps 
                             // with next interval (in case the timer is late)
-var nextNoteTime = 0.0;     // when the next note is due.
-var noteResolution = 0;     // 0 == 16th, 1 == 8th, 2 == quarter note
+var nextTickTime = 0.0;     // when the next tick is due.
+var halfNum = 0;            // bar index, starting from 0
+var goOrReturn = "go";      // increasing resolution or decreasing?
+var resolution = 16;         // how many notes in two beats
 var noteLength = 0.05;      // length of "beep" (in seconds)
 var timerWorker = null;     // The Web Worker used to fire timer messages
 
-function nextNote() {
-    // Advance current note and time by a 16th note...
-    var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT 
-                                          // tempo value to calculate beat length.
-    nextNoteTime += 0.25 * secondsPerBeat;    // Add beat length to last beat time
+var values = [,,
+              "quarters",         // 2
+              "quarter triplets", // 3
+              "eights",,          // 4
+              "eight triplets",,  // 6
+              "sixteenths",,,,    // 8
+              "sextuplets",,,,    // 12
+              "32ths"]            // 16
 
-    current16thNote++;    // Advance the beat number, wrap to zero
-    if (current16thNote == 16) {
-        current16thNote = 0;
+
+function nextTick() {
+    // a tick is a 48th of two beats since we need
+    // - 32th notes (8th of a beat, so 16 in a half note)
+    // - triplets (of quarters and sextuplets)
+    var tick = 2 * (60.0 / tempo) / 48;
+    nextTickTime += tick;
+
+    currentTick++;
+    if (currentTick == 48) {
+        currentTick = 0;
+        halfNum++;
+        if (halfNum == 4) {
+            halfNum = 0;
+            if (goOrReturn == "go") {
+                if (resolution == 2) resolution = 3;
+                else if (resolution == 3) resolution = 4;
+                else if (resolution == 4) resolution = 6;
+                else if (resolution == 6) resolution = 8;
+                else if (resolution == 8) resolution = 12;
+                else if (resolution == 12) {
+                    resolution = 16;
+                    goOrReturn = "return";
+                }
+            } else {
+                if (resolution == 16) resolution = 12;
+                else if (resolution == 12) resolution = 8;
+                else if (resolution == 8) resolution = 6;
+                else if (resolution == 6) resolution = 4;
+                else if (resolution == 4) resolution = 3;
+                else if (resolution == 3) {
+                    resolution = 2;
+                    goOrReturn = "go";
+                }
+            }
+            var score = document.getElementById("score");
+            score.innerHTML = values[resolution];
+        }
     }
 }
 
-function scheduleNote( beatNumber, time ) {
+function scheduleNote( tickNumber, time ) {
 
-    if ( (noteResolution==1) && (beatNumber%2))
-        return; // we're not playing non-8th 16th notes
-    if ( (noteResolution==2) && (beatNumber%4))
-        return; // we're not playing non-quarter 8th notes
+    // handle the note
+    if (!(resolution * tickNumber % 48 == 0)) return;
 
     // create an oscillator
     var osc = audioContext.createOscillator();
     osc.connect( audioContext.destination );
-    if (beatNumber % 16 === 0)    // beat 0 == high pitch
+    if (tickNumber % 48 == 0 && halfNum % 2 == 0)
         osc.frequency.value = 880.0;
-    else if (beatNumber % 4 === 0 )    // quarter notes = medium pitch
+    else
         osc.frequency.value = 440.0;
-    else                        // other 16th notes = low pitch
-        osc.frequency.value = 220.0;
 
     osc.start( time );
     osc.stop( time + noteLength );
@@ -50,9 +86,9 @@ function scheduleNote( beatNumber, time ) {
 function scheduler() {
     // while there are notes that will need to play before the next interval, 
     // schedule them and advance the pointer.
-    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
-        scheduleNote( current16thNote, nextNoteTime );
-        nextNote();
+    while (nextTickTime < audioContext.currentTime + scheduleAheadTime ) {
+        scheduleNote( currentTick, nextTickTime );
+        nextTick();
     }
 }
 
@@ -69,8 +105,11 @@ function play() {
     isPlaying = !isPlaying;
 
     if (isPlaying) { // start playing
-        current16thNote = 0;
-        nextNoteTime = audioContext.currentTime;
+        currentTick = 0;
+        halfNum = 0;
+        resolution = 2;
+        goOrReturn == "go";
+        nextTickTime = audioContext.currentTime;
         timerWorker.postMessage("start");
         return "stop";
     } else {

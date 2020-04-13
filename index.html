@@ -9,7 +9,9 @@
     <script src="js/metronome.js"></script>
   </head>
   <body>
-    <a id="fork" href="https://github.com/cwilso/metronome">Fork me on GitHub</a>
+    <a id="fork" href="https://github.com/Grahack/metronome">Fork me on GitHub</a>
+    <h1>The Grid</h1>
+    <p>Thanks to <a href="https://youtu.be/BpliKMfUrI4?t=363">Rob Brown</a>.</p>
     <div id="controls">
       <div><a class="play" onclick="this.innerText = play();">play</a></div>
       <div id="tempoBox">
@@ -19,6 +21,7 @@
                  onInput="tempo = event.target.value;
                           document.getElementById('showTempo').innerText=tempo;">
       </div>
+      <div id="score">quarters</div>
     </div>
    </body>
 </html>
