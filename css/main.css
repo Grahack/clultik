@@ -1,3 +1,9 @@
+#fork {
+    position: absolute;
+    top: -5px;
+    right: 15px;
+}
+
 #controls {
 	font-family:arial;
 	font-size:24px;
@@ -9,6 +15,11 @@
 	margin: 5px;
 	display:inline-block;
 	
+}
+
+#tempoBox input {
+    height: 20px;
+    width: 200px;
 }
 
 .play {
