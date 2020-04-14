@@ -15,6 +15,8 @@ var goOrReturn = "go";      // increasing resolution or decreasing?
 var resolution = 16;         // how many notes in two beats
 var noteLength = 0.05;      // length of "beep" (in seconds)
 var timerWorker = null;     // The Web Worker used to fire timer messages
+var storage = window.localStorage;
+var list = null;
 
 var values = [,,
               "quarters",         // 2
@@ -118,7 +120,83 @@ function play() {
     }
 }
 
+function addEmpty() {
+    var data = {'title': "le titre",
+                'tempo1': 80, 'tempo2': 100, 'duration': 60};
+    add(data);
+}
+
+function numElem(data, key) {
+    var elt = document.createElement("input");
+    elt.type = 'text';
+    elt.value = data[key];
+    elt.size = 3;
+    elt.className = 'num-elem';
+    return elt
+}
+
+function playThis(event) {
+    var children = event.originalTarget.parentElement.childNodes;
+    tempo1 =   children[2].value;
+    tempo2 =   children[4].value;
+    duration = children[6].value;
+    console.log(tempo1);
+}
+
+function add(data) {
+    // container
+    var item = document.createElement("li");
+    item.className = "listitem";
+    // play button
+    var play = document.createElement("span");
+    play.className = "play2";
+    play.innerHTML = ">";
+    play.onclick = playThis;
+    item.appendChild(play);
+    // title
+    var title = document.createElement("input");
+    title.type = 'text';
+    title.value = data['title'];
+    title.size = 25;
+    item.appendChild(title);
+    // tempi and duration
+    item.appendChild(numElem(data, 'tempo1'));
+    item.insertAdjacentHTML('beforeend', " to ");
+    item.appendChild(numElem(data, 'tempo2'));
+    item.insertAdjacentHTML('beforeend', " in ");
+    item.appendChild(numElem(data, 'duration'));
+    item.insertAdjacentHTML('beforeend', "s");
+    // remove button
+    var remove = document.createElement("span");
+    remove.className = "remove";
+    remove.innerHTML = "-";
+    item.appendChild(remove);
+    // add container to the list
+    list.prepend(item);
+}
+
 function init(){
+
+    list = document.getElementById("list");
+    // fetch data from storage
+    var clickString = localStorage.getItem('clicks');
+    var clicks = [];
+    clickString.split('\n').forEach(function (elt) {clicks.push(elt)});
+    clicks.reverse();  // because our add function prepends
+    clicks = clicks.map(function (elt) {
+        var s = elt.split(':');
+        var title = s[0].trim();
+        var tempoArray = s[1].split(',');
+        var tempo1 =   parseInt(tempoArray[0].trim());
+        var tempo2 =   parseInt(tempoArray[1].trim());
+        var duration = parseInt(tempoArray[2].trim());
+        return {'title':  title,
+                'tempo1': tempo1,
+                'tempo2': tempo2,
+                'duration':  duration};});
+    clicks.map(function (elt) {
+        add(elt);
+    });
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js

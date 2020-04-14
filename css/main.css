@@ -1,3 +1,7 @@
+body {
+    margin: 1em;
+}
+
 #fork {
     position: absolute;
     top: -5px;
@@ -22,22 +26,42 @@
     width: 200px;
 }
 
-.play {
-	-moz-box-shadow:inset 0px 20px 26px 0px #b6cde3;
-	-webkit-box-shadow:inset 0px 20px 26px 0px #b6cde3;
-	box-shadow:inset 0px 20px 26px 0px #b6cde3;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
-	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
-	background-color:#79bbff;
+#list {
+    list-style-type: none;
+}
+
+.play, .add, .play2, .remove {
 	-moz-border-radius:20px;
 	-webkit-border-radius:20px;
 	border-radius:20px;
 	color:#ffffff;
-	padding:8px 24px;
 	text-decoration:none;
 	text-shadow:1px 1px 6px #000000;
-	width: 80px;
 	text-align: center;
+}
+
+.play, .play2 {
+	background-color:#79bbff;
+}
+
+.play {
+	padding: 8px 24px;
+}
+
+.play2 {
+	padding: 2px 12px;
+    margin-right: 1em;
+}
+
+.add {
+	padding: 2px 12px;
+    background-color: #3c3;
+}
+
+.remove {
+	padding: 2px 12px;
+    margin-left: 1em;
+    background-color: #f99;
 }
 
 .play:hover {
@@ -49,6 +73,10 @@
 .play:active {
 	position:relative;
 	top:1px; left: 1px;
+}
+
+.num-elem {
+    width: 50px;
 }
 
 #showTempo { 
