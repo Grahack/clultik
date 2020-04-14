@@ -242,13 +242,27 @@ function add(data) {
     list.prepend(item);
 }
 
-function init(){
+function buildExport() {
+    var out = "";
+    document.getElementById('list').childNodes.forEach(function (elt) {
+        var children = elt.childNodes;
+        title  =   children[1].value;
+        tempo1 =   children[2].value;
+        tempo2 =   children[4].value;
+        duration = children[6].value;
+        out += title + ": " + tempo1 + ", " + tempo2 + ", " + duration + "\n";
+    });
+    return out.trim();
+}
 
-    list = document.getElementById("list");
-    // fetch data from storage
-    var clickString = localStorage.getItem('clicks');
+function _save() {
+    localStorage.setItem('clicks', buildExport());
+    alert("Saved to this browser!");
+}
+
+function parseImport(str) {
     var clicks = [];
-    clickString.split('\n').forEach(function (elt) {clicks.push(elt)});
+    str.trim().split('\n').forEach(function (elt) {clicks.push(elt)});
     clicks.reverse();  // because our add function prepends
     clicks = clicks.map(function (elt) {
         var s = elt.split(':');
@@ -264,6 +278,44 @@ function init(){
     clicks.map(function (elt) {
         add(elt);
     });
+}
+
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+    let fr = new FileReader();
+    fr.onload = x => resolve(fr.result);
+    fr.readAsText(file);
+});}
+
+function _import() {
+    if (confirm( "This will erase your clicks.")) {
+        document.getElementById('selectedFile').click();
+    }
+}
+async function doImport(inputElement) {
+    list.innerHTML = "";
+    var content = await readFile(inputElement.files[0]);
+    parseImport(content);
+}
+
+function _export() {
+    // https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
+    var date = new Date().toJSON().slice(0, 10).replace(/-/g, '');
+    var element = document.createElement('a');
+    element.setAttribute('href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(buildExport()));
+    element.setAttribute('download', date + "_clicklist.txt");
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
+function init(){
+
+    list = document.getElementById("list");
+    // fetch data from storage
+    parseImport(localStorage.getItem('clicks').trim());
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js

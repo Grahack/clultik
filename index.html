@@ -24,7 +24,14 @@
       <div id="score">quarters</div>
     </div>
     <h1>The List</h1>
-    <div><a class="add" onclick="addEmpty();">+</a></div>
+    <div>
+        <a class="add" onclick="addEmpty();">+</a>
+        <a class="add" onclick="_save();">save</a>
+        <a class="add" onclick="_import()">import</a>
+        <input type="file" id="selectedFile" style="display: none;"
+               onchange="doImport(this)"/>
+        <a class="add" onclick="_export();">export</a>
+    </div>
     <ul id="list"></ul>
    </body>
 </html>
