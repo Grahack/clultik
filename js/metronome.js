@@ -4,6 +4,9 @@ var isPlaying = false;      // Are we currently playing?
 var startTime;              // The start time of the entire sequence.
 var currentTick = 0;        // What tick is currently last scheduled?
 var tempo = 60.0;           // tempo (in beats per minute)
+var tempo1 = 60;            // tempo (in beats per minute)
+var tempo2 = 60;            // tempo (in beats per minute)
+var duration = 60;          // tempo (in beats per minute)
 var lookahead = 25.0;       // How frequently to call scheduling function 
                             //(in milliseconds)
 var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
@@ -11,8 +14,12 @@ var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
                             // with next interval (in case the timer is late)
 var nextTickTime = 0.0;     // when the next tick is due.
 var halfNum = 0;            // bar index, starting from 0
-var goOrReturn = "go";      // increasing resolution or decreasing?
-var resolution = 16;         // how many notes in two beats
+var mode = "";              // grid, list, up or down
+var resolution = 16;        // how many notes in two beats
+
+var started;                // when starting an acceleration of en exercise
+var nextBeatTime = 0.0;    // when the next click is due.
+
 var noteLength = 0.05;      // length of "beep" (in seconds)
 var timerWorker = null;     // The Web Worker used to fire timer messages
 var storage = window.localStorage;
@@ -41,7 +48,7 @@ function nextTick() {
         halfNum++;
         if (halfNum == 4) {
             halfNum = 0;
-            if (goOrReturn == "go") {
+            if (mode == "grid up") {
                 if (resolution == 2) resolution = 3;
                 else if (resolution == 3) resolution = 4;
                 else if (resolution == 4) resolution = 6;
@@ -49,7 +56,7 @@ function nextTick() {
                 else if (resolution == 8) resolution = 12;
                 else if (resolution == 12) {
                     resolution = 16;
-                    goOrReturn = "return";
+                    mode = "grid down";
                 }
             } else {
                 if (resolution == 16) resolution = 12;
@@ -59,11 +66,34 @@ function nextTick() {
                 else if (resolution == 4) resolution = 3;
                 else if (resolution == 3) {
                     resolution = 2;
-                    goOrReturn = "go";
+                    mode = "grid up";
                 }
             }
             var score = document.getElementById("score");
             score.innerHTML = values[resolution];
+        }
+    }
+}
+
+function nextBeat() {
+
+    var beat = 60.0 / tempo;
+    nextBeatTime += beat;
+
+    var elapsed = audioContext.currentTime - started;
+    var dev = (tempo2-tempo1) / duration * elapsed;
+
+    if (mode == "list up") {
+        tempo = tempo1 + dev;
+        if (tempo >= tempo2) {
+            mode = "list down";
+            started = audioContext.currentTime;
+        }
+    } else {
+        tempo = tempo2 - dev;
+        if (tempo <= tempo1) {
+            mode = "list up";
+            started = audioContext.currentTime;
         }
     }
 }
@@ -85,12 +115,27 @@ function scheduleNote( tickNumber, time ) {
     osc.stop( time + noteLength );
 }
 
+function scheduleBeat( time ) {
+    var osc = audioContext.createOscillator();
+    osc.connect( audioContext.destination );
+    osc.frequency.value = 440.0;
+    osc.start( time );
+    osc.stop( time + noteLength );
+}
+
 function scheduler() {
     // while there are notes that will need to play before the next interval, 
     // schedule them and advance the pointer.
-    while (nextTickTime < audioContext.currentTime + scheduleAheadTime ) {
-        scheduleNote( currentTick, nextTickTime );
-        nextTick();
+    if (mode.substring(0, 4) == "grid") {
+        while (nextTickTime < audioContext.currentTime + scheduleAheadTime ) {
+            scheduleNote( currentTick, nextTickTime );
+            nextTick();
+        }
+    } else {
+        while (nextBeatTime < audioContext.currentTime + scheduleAheadTime ) {
+            scheduleBeat( nextBeatTime );
+            nextBeat();
+        }
     }
 }
 
@@ -110,13 +155,43 @@ function play() {
         currentTick = 0;
         halfNum = 0;
         resolution = 2;
-        goOrReturn == "go";
+        mode = "grid up";
         nextTickTime = audioContext.currentTime;
         timerWorker.postMessage("start");
         return "stop";
     } else {
         timerWorker.postMessage("stop");
         return "play";
+    }
+}
+
+function playThis(event) {
+    var children = event.originalTarget.parentElement.childNodes;
+    tempo1 =   parseInt(children[2].value);
+    tempo2 =   parseInt(children[4].value);
+    duration = parseInt(children[6].value);
+
+    if (!unlocked) {
+      // play silent buffer to unlock the audio
+      var buffer = audioContext.createBuffer(1, 1, 22050);
+      var node = audioContext.createBufferSource();
+      node.buffer = buffer;
+      node.start(0);
+      unlocked = true;
+    }
+
+    isPlaying = !isPlaying;
+
+    if (isPlaying) { // start playing
+        tempo = tempo1;
+        started = audioContext.currentTime;
+        mode = "list up";
+        nextBeatTime = audioContext.currentTime;
+        timerWorker.postMessage("start");
+        return "×";
+    } else {
+        timerWorker.postMessage("stop");
+        return ">";
     }
 }
 
@@ -135,14 +210,6 @@ function numElem(data, key) {
     return elt
 }
 
-function playThis(event) {
-    var children = event.originalTarget.parentElement.childNodes;
-    tempo1 =   children[2].value;
-    tempo2 =   children[4].value;
-    duration = children[6].value;
-    console.log(tempo1);
-}
-
 function add(data) {
     // container
     var item = document.createElement("li");
@@ -151,7 +218,7 @@ function add(data) {
     var play = document.createElement("span");
     play.className = "play2";
     play.innerHTML = ">";
-    play.onclick = playThis;
+    play.onclick = function(event) {play.innerText = playThis(event);};
     item.appendChild(play);
     // title
     var title = document.createElement("input");
@@ -187,9 +254,9 @@ function init(){
         var s = elt.split(':');
         var title = s[0].trim();
         var tempoArray = s[1].split(',');
-        var tempo1 =   parseInt(tempoArray[0].trim());
-        var tempo2 =   parseInt(tempoArray[1].trim());
-        var duration = parseInt(tempoArray[2].trim());
+        var tempo1 =   tempoArray[0].trim();
+        var tempo2 =   tempoArray[1].trim();
+        var duration = tempoArray[2].trim();
         return {'title':  title,
                 'tempo1': tempo1,
                 'tempo2': tempo2,
