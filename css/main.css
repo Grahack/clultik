@@ -55,16 +55,3 @@
 	display: inline-block;
 	width: 45px; 
 }
-
-* {
-    -webkit-user-select: none;
-}
-
-body, html {
-    margin: 0;
-    height: 100%;
-    position: relative;
-}
-body {
-    overflow: auto;
-}
