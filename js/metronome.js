@@ -237,7 +237,7 @@ function add(data) {
     var title = document.createElement("input");
     title.type = 'text';
     title.value = data['title'];
-    title.size = 25;
+    title.size = 35;
     item.appendChild(title);
     // tempi and duration
     item.appendChild(numElem(data, 'tempo1'));
