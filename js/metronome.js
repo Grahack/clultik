@@ -1,4 +1,5 @@
 var audioContext = null;
+var locStorageOK = false;
 var unlocked = false;
 var isPlaying = false;      // Are we currently playing?
 var startTime;              // The start time of the entire sequence.
@@ -277,8 +278,12 @@ function buildExport() {
 }
 
 function _save() {
-    localStorage.setItem('clicks', buildExport());
-    alert("Saved to this browser!");
+    if (locStorageOK) {
+        storage.setItem('clicks', buildExport());
+        alert("Saved to this browser!");
+    } else {
+        alert("Unable to save!");
+    }
 }
 
 function parseImport(str) {
@@ -333,18 +338,43 @@ function _export() {
     document.body.removeChild(element);
 }
 
+function localStorageTest() {
+    if (typeof storage !== 'undefined') {
+        try {
+            storage.setItem('feature_test', 'yes');
+            if (storage.getItem('feature_test') === 'yes') {
+                storage.removeItem('feature_test');
+                return true;
+            } else {
+                alert("Local storage doesn't work correctly :(");
+                return false;
+            }
+        } catch(e) {
+            alert("Please enable local storage and reload!");
+            return false;
+        }
+    } else {
+        alert("Your browser doesn't support local storage.");
+    }
+}
+
 function init(){
 
     score = document.getElementById("score");
     list = document.getElementById("list");
     // fetch data from storage
-    var localData = localStorage.getItem('clicks');
-    if (localData) {
-        parseImport(localData.trim());
-    } else {
-        var data = {'title': "Click + or import to add clicks",
-                    'tempo1': 80, 'tempo2': 100, 'duration': 60};
-        add(data);
+    locStorageOK = localStorageTest();
+    if (locStorageOK) {
+        var localData = storage.getItem('clicks');
+        if (localData) {
+            parseImport(localData.trim());
+        } else {
+            var data = {'title': "Click + or import to add clicks",
+                        'tempo1': 80, 'tempo2': 100, 'duration': 60};
+            add(data);
+            location.href = "#";
+            location.href = "#fr";
+        }
     }
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
