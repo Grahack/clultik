@@ -262,7 +262,7 @@ function suppr(event) {
 
 function buildExport() {
     var out = "";
-    document.getElementById('list').childNodes.forEach(function (elt) {
+    list.childNodes.forEach(function (elt) {
         var children = elt.childNodes;
         title  =   children[1].value;
         tempo1 =   children[2].value;
