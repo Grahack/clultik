@@ -153,14 +153,16 @@ function play() {
     isPlaying = !isPlaying;
 
     if (isPlaying) { // start playing
-        currentTick = 0;
-        halfNum = 0;
-        resolution = 2;
-        mode = "grid up";
         nextTickTime = audioContext.currentTime;
         timerWorker.postMessage("start");
         return "stop";
     } else {
+        mode = "grid up";
+        currentTick = 0;
+        halfNum = 0;
+        resolution = 2;
+        score.src = 'img/2.png';
+        score.alt = "quarters";
         timerWorker.postMessage("stop");
         return "play";
     }
