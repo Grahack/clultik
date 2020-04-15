@@ -237,9 +237,14 @@ function add(data) {
     var remove = document.createElement("span");
     remove.className = "remove";
     remove.innerHTML = "-";
+    remove.onclick = suppr;
     item.appendChild(remove);
     // add container to the list
     list.prepend(item);
+}
+
+function suppr(event) {
+    event.originalTarget.parentElement.remove();
 }
 
 function buildExport() {
