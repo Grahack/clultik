@@ -70,7 +70,8 @@ function nextTick() {
                 }
             }
             var score = document.getElementById("score");
-            score.innerHTML = values[resolution];
+            score.src = 'img/' + resolution + '.png';
+            score.alt = values[resolution];
         }
     }
 }
