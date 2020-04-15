@@ -315,7 +315,14 @@ function init(){
 
     list = document.getElementById("list");
     // fetch data from storage
-    parseImport(localStorage.getItem('clicks').trim());
+    var localData = localStorage.getItem('clicks');
+    if (localData) {
+        parseImport(localData.trim());
+    } else {
+        var data = {'title': "Click + or import to add clicks",
+                    'tempo1': 80, 'tempo2': 100, 'duration': 60};
+        add(data);
+    }
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js
