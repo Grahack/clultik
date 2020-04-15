@@ -23,6 +23,7 @@ var nextBeatTime = 0.0;    // when the next click is due.
 var noteLength = 0.05;      // length of "beep" (in seconds)
 var timerWorker = null;     // The Web Worker used to fire timer messages
 var storage = window.localStorage;
+var score = null;
 var list = null;
 
 var values = [,,
@@ -69,7 +70,6 @@ function nextTick() {
                     mode = "grid up";
                 }
             }
-            var score = document.getElementById("score");
             score.src = 'img/' + resolution + '.png';
             score.alt = values[resolution];
         }
@@ -333,6 +333,7 @@ function _export() {
 
 function init(){
 
+    score = document.getElementById("score");
     list = document.getElementById("list");
     // fetch data from storage
     var localData = localStorage.getItem('clicks');
