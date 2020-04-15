@@ -3,15 +3,18 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width user-scalable=no">
-    <title>Metronome</title>
+    <title>Clultik</title>
     <link rel="stylesheet" href="css/main.css">
     <script src="AudioContextMonkeyPatch.js"></script>
     <script src="js/metronome.js"></script>
   </head>
   <body>
-    <a id="fork" href="https://github.com/Grahack/metronome">Fork me on GitHub</a>
-    <h1>The Grid</h1>
-    <p>Thanks to <a href="https://youtu.be/BpliKMfUrI4?t=363">Rob Brown</a>.</p>
+    <div id="doc-links">Documentation
+      <a href="#fr">FR</a> -
+      <a href="#en">EN</a>
+    </div>
+    <h1>Clultik, the multi click</h1>
+    <h2 id="the-grid">The Grid</h2>
     <div id="controls">
       <div class="play" onclick="this.innerText = play();">play</div>
       <div id="tempoBox">
@@ -23,7 +26,7 @@
       </div>
     </div>
     <img id="score" src="img/2.png" alt="quarters"/>
-    <h1>The List</h1>
+    <h2 id="the-list">The List</h2>
     <div>
         <a class="add" onclick="addEmpty();">+</a>
         <a class="add" onclick="sort();">sort</a>
@@ -34,5 +37,79 @@
         <a class="add" onclick="_export();">export</a>
     </div>
     <ul id="list"></ul>
+
+    <h2 id="fr">Clultik, pourquoi et comment ?</h2>
+    <p>Ce métronome permet 1) de travailler les changements de débit avec
+    <a href="#the-grid">The Grid</a>
+    et 2) gérer une liste de tempi de travail pour chacun de vos exercices
+    préférés avec <a href="#the-list">The List</a>.</p>
+
+    <h3>The Grid</h3>
+    <p>Dans <a href="https://youtu.be/BpliKMfUrI4?t=363">cette video</a>,
+    Rob Brown nous explique que les changements de débits participent souvent
+    à la dérive de notre tempo. Il faut donc les travailler !!!</p>
+    <p>En appuyant sur « Play », vous démarrez le métronome pour :</p>
+    <ul>
+        <li>deux mesures de noires,</li>
+        <li>deux mesures de triolets de noires,</li>
+        <li>deux mesures de croches,</li>
+        <li>deux mesures de triolets,</li>
+        <li>deux mesures de doubles croches,</li>
+        <li>deux mesures de sextolets,</li>
+        <li>deux mesures de triples croches,</li>
+        <li>et on repart dans l’autre sens.</li>
+    </ul>
+    <p>À travailler avec ou sans instrument, voire juste à écouter.</p>
+
+    <h3>The List</h3>
+    <p>Cette partie vous permet de gérer une liste de tempi pour vos
+    exercices préférés. Pour chacun vous donnez :</p>
+    <ul>
+        <li>un titre ou une description,</li>
+        <li>un tempo de départ,</li>
+        <li>un tempo d’arrivée,</li>
+        <li>une durée pour passer de l’un à l’autre.</li>
+    </ul>
+    <p>Une fois arrivé au tempo le plus rapide, le métronome revient au tempo
+    de départ, et ainsi de suite. Si vous voulez un tempo constant, donnez
+    le même tempo pour le départ et l’arrivée.</p>
+    <p>Cela peut servir pour des exercices, mais aussi des chansons, des
+    pièces de musique classique…</p>
+    <p>Les batteurs peuvent charger :</p>
+    <ul>
+        <li>les 40 <a target="_blank"
+           href="https://www.pas.org/resources/rudiments">rudiments</a>,
+           en cliquant sur
+           <a href="#the-list" onclick="addRudiments();">ce lien</a>,
+        </li>
+        <li>les 15 <a target="_blank"
+            href="https://www.youtube.com/watch?v=U84h9mtdgig">exos
+            proposés par Austin Burcham</a>
+           en cliquant sur
+           <a href="#the-list" onclick="addCreative();">ce lien</a>.
+        </li>
+    </ul>
+    <h3>Manipulation</h3>
+    <ul>
+        <li>(+) pour ajouter une ligne à la liste,</li>
+        <li>(-) à la fin d’une ligne pour la supprimer,</li>
+        <li>(sort) pour trier la liste dans l’ordre alphabétique des titres,</li>
+        <li>(save) pour sauvegarder votre liste sur ce navigateur,</li>
+        <li>(import) pour importer un fichier texte (voir ci-dessous),</li>
+        <li>(export) pour exporter la liste dans un fichier texte (voir
+            ci-dessous).</li>
+    </ul>
+    <p>L’import/export, c’est important. Non seulement vous pouvez sauvegarder
+    vos listes et les installer sur vos autres appareils, mais vous pouvez
+    aussi partager vos listes avec vos amis. De plus, avec un bon éditeur de
+    texte, comme <a target="_blank" href="https://scintilla.org/SciTE.html">SciTE</a>,
+    vous pourrez les modifier sans passer par cette interface utilisateur
+    lourdasse.</p>
+    <h3>Divers</h3>
+    <p>Participez au projet en proposant des suggestions
+    <a href="https://github.com/Grahack/clultik">sur GitHub</a>.</p>
+
+    <h2 id="en">Clultik, why and how?</h2>
+    <p>TODO</p>
    </body>
 </html>
