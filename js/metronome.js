@@ -293,7 +293,7 @@ function readFile(file) {
 });}
 
 function _import() {
-    if (confirm( "This will erase your clicks.")) {
+    if (confirm("This will erase your clicks.")) {
         document.getElementById('selectedFile').click();
     }
 }
