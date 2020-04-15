@@ -295,6 +295,7 @@ function readFile(file) {
 function _import() {
     if (confirm("This will erase your clicks.")) {
         document.getElementById('selectedFile').click();
+        alert("Now save to browser if needed.");
     }
 }
 async function doImport(inputElement) {
