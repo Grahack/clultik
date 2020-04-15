@@ -306,6 +306,71 @@ function parseImport(str) {
     });
 }
 
+function addRudiments() {
+    var items = [
+        "rudim 01 Single stroke roll *: 120, 144, 60",
+        "rudim 02 Single stroke four: 102, 128, 60",
+        "rudim 03 Single stroke seven : 102, 128, 60",
+        "rudim 04 Multiple bounce roll: 60, 68, 60",
+        "rudim 05 Triple stroke roll: 60, 68, 60",
+        "rudim 06 Double stroke open roll *: 82, 176, 60",
+        "rudim 07 Five stroke roll: 54, 88, 60",
+        "rudim 08 Six stroke roll: 54, 80, 60",
+        "rudim 09 Seven stroke roll *: 48, 68, 60",
+        "rudim 10 Nine stroke roll *: 50, 76, 60",
+        "rudim 11 Ten stroke roll *: 50, 84, 60",
+        "rudim 12 Eleven stroke roll *: 50, 84, 60",
+        "rudim 13 Thirteen stroke roll *: 60, 60, 60",
+        "rudim 14 Fifteen stroke roll: 60, 60, 60",
+        "rudim 15 Seventeen stroke roll: 60, 60, 60",
+        "rudim 16 Single paradiddle *: 82, 136, 60",
+        "rudim 17 Double paradiddle *: 92, 126, 60",
+        "rudim 18 Triple paradiddle: 92, 128, 60",
+        "rudim 19 Single paradiddle-diddle: 56, 74, 60",
+        "rudim 20 Flam *: 116, 182, 60",
+        "rudim 21 Flam accent *: 74, 106, 60",
+        "rudim 22 Flam tap *: 56, 78, 60",
+        "rudim 23 Flamacue *: 76, 110, 60",
+        "rudim 24 Flam paradiddle *: 60, 94, 60",
+        "rudim 25 Single flammed mill: 56, 86, 60",
+        "rudim 26 Flam paradiddlediddle *: 120, 180, 60",
+        "rudim 27 Pataflafla: 52, 68, 60",
+        "rudim 28 Swiss army triplet: 80, 126, 60",
+        "rudim 29 Inverted flam tap: 40, 50, 60",
+        "rudim 30 Flam drag: 76, 96, 60",
+        "rudim 31 Drag *: 60, 80, 60",
+        "rudim 32 Single drag tap *: 60, 80, 60",
+        "rudim 33 Double drag tap *: 60, 80, 60",
+        "rudim 34 Lesson 25 *: 60, 80, 60",
+        "rudim 35 Single dragadiddle: 60, 80, 60",
+        "rudim 36 Drag paradiddle #1 *: 60, 80, 60",
+        "rudim 37 Drag paradiddle #2 *: 60, 80, 60",
+        "rudim 38 Single ratamacue *: 60, 80, 60",
+        "rudim 39 Double ratamacue *: 60, 80, 60",
+        "rudim 40 Triple ratamacue *: 60, 80, 60 "];
+    parseImport(items.join('\n'));
+}
+
+function addCreative() {
+    var items = [
+        "abb creative 01 4’s to 8 turnaround: 70, 90, 60",
+        "abb creative 02 3’s to 4 turnaround: 70, 90, 60",
+        "abb creative 03 Left hand blaster: 90, 108, 60",
+        "abb creative 04 Interlaced singles builder: 166, 184, 60",
+        "abb creative 05 Tricky triplet doubles: 112, 132, 60",
+        "abb creative 06 Triplet accent shifter: 128, 148, 60",
+        "abb creative 07 Paradiddlediddle turnaround: 82, 96, 60",
+        "abb creative 08 Double stroke accent shifter: 45, 62, 60",
+        "abb creative 09 Fast five turnaround: 80, 102, 60",
+        "abb creative 10 Pullout accent builder: 60, 80, 60",
+        "abb creative 11 Flam tap turnaround: 60, 76, 60",
+        "abb creative 12 Funky flam flow: 68, 88, 60",
+        "abb creative 13 Swiss triplet turnaround: 68, 84, 60",
+        "abb creative 14 Triplet accent displacement: 100, 120, 60",
+        "abb creative 15 Paraddidle accent displacement: 60, 80, 60"];
+    parseImport(items.join('\n'));
+}
+
 function readFile(file) {
   return new Promise((resolve, reject) => {
     let fr = new FileReader();
