@@ -76,6 +76,7 @@ body {
 }
 
 .num-elem {
+    text-align: right;
     width: 50px;
 }
 
