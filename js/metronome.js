@@ -170,7 +170,7 @@ function play() {
 }
 
 function playThis(event) {
-    var children = event.originalTarget.parentElement.childNodes;
+    var children = event.target.parentElement.childNodes;
     tempo1 =   parseInt(children[2].value);
     tempo2 =   parseInt(children[4].value);
     duration = parseInt(children[6].value);
@@ -261,7 +261,7 @@ function add(data) {
 }
 
 function suppr(event) {
-    event.originalTarget.parentElement.remove();
+    event.target.parentElement.remove();
 }
 
 function buildExport() {
