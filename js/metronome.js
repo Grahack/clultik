@@ -210,6 +210,19 @@ function numElem(data, key) {
     return elt
 }
 
+function sort() {
+    var clicksArray = Array.prototype.slice.call(list.childNodes, 0);
+    clicksArray.sort(compareClicks);
+    list.innerHTML = '';
+    clicksArray.forEach(function (elt) {list.append(elt)});
+}
+
+function compareClicks(a, b) {
+    if (a.childNodes[1].value < b.childNodes[1].value) return -1;
+    if (a.childNodes[1].value > b.childNodes[1].value) return 1;
+    return 0
+}
+
 function add(data) {
     // container
     var item = document.createElement("li");
