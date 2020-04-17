@@ -306,6 +306,27 @@ function parseImport(str) {
     });
 }
 
+function addParadiddles() {
+    var items = [
+        "paradiddles Rlrr Lrll: 90, 114, 60",
+        "paradiddles rLrr lRll: 70, 88, 60",
+        "paradiddles rlRr lrLl: 70, 80, 60",
+        "paradiddles rlrR lrlL: 70, 80, 60",
+        "paradiddles Rllr Lrrl: 70, 82, 60",
+        "paradiddles rLlr lRrl: 70, 80, 60",
+        "paradiddles rlLr lrRl: 70, 80, 60",
+        "paradiddles rllR lrrL: 70, 80, 60",
+        "paradiddles Rrlr Llrl: 70, 80, 60",
+        "paradiddles rRlr lLrl: 70, 80, 60",
+        "paradiddles rrLr llRl: 70, 88, 60",
+        "paradiddles rrlR llrL: 70, 88, 60",
+        "paradiddles Rlrl Lrlr: 70, 80, 60",
+        "paradiddles rLrl lRlr: 70, 80, 60",
+        "paradiddles rlRl lrLr: 70, 80, 60",
+        "paradiddles rlrL lrlR: 70, 86, 60"];
+    parseImport(items.join('\n'));
+}
+
 function addRudiments() {
     var items = [
         "rudim 01 Single stroke roll *: 120, 144, 60",
