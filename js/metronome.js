@@ -36,6 +36,98 @@ var values = [,,
               "sextuplets",,,,    // 12
               "32ths"]            // 16
 
+/* from https://webaudioapi.com/static/js/shared.js */
+// Start off by initializing a new context.
+context = new (window.AudioContext || window.webkitAudioContext)();
+
+// shim layer with setTimeout fallback
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame    ||
+    window.oRequestAnimationFrame      ||
+    window.msRequestAnimationFrame     ||
+    function(callback) {
+    window.setTimeout(callback, 1000 / 60);
+  };
+})();
+
+function playSound(buffer, time) {
+  var source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source[source.start ? 'start' : 'noteOn'](time);
+}
+
+function loadSounds(obj, soundMap, callback) {
+  // Array-ify
+  var names = [];
+  var paths = [];
+  for (var name in soundMap) {
+    var path = soundMap[name];
+    names.push(name);
+    paths.push(path);
+  }
+  bufferLoader = new BufferLoader(context, paths, function(bufferList) {
+    for (var i = 0; i < bufferList.length; i++) {
+      var buffer = bufferList[i];
+      var name = names[i];
+      obj[name] = buffer;
+    }
+    if (callback) {
+      callback();
+    }
+  });
+  bufferLoader.load();
+}
+
+function BufferLoader(context, urlList, callback) {
+  this.context = context;
+  this.urlList = urlList;
+  this.onload = callback;
+  this.bufferList = new Array();
+  this.loadCount = 0;
+}
+
+BufferLoader.prototype.loadBuffer = function(url, index) {
+  // Load buffer asynchronously
+  var request = new XMLHttpRequest();
+  request.open("GET", url, true);
+  request.responseType = "arraybuffer";
+
+  var loader = this;
+
+  request.onload = function() {
+    // Asynchronously decode the audio file data in request.response
+    loader.context.decodeAudioData(
+      request.response,
+      function(buffer) {
+        if (!buffer) {
+          alert('error decoding file data: ' + url);
+          return;
+        }
+        loader.bufferList[index] = buffer;
+        if (++loader.loadCount == loader.urlList.length)
+          loader.onload(loader.bufferList);
+      },
+      function(error) {
+        console.error('decodeAudioData error', error);
+      }
+    );
+  }
+
+  request.onerror = function() {
+    alert('BufferLoader: XHR error');
+  }
+
+  request.send();
+};
+
+BufferLoader.prototype.load = function() {
+  for (var i = 0; i < this.urlList.length; ++i)
+  this.loadBuffer(this.urlList[i], i);
+};
+/* end of shared.js*/
 
 function nextTick() {
     // a tick is a 48th of two beats since we need
@@ -101,28 +193,12 @@ function nextBeat() {
 }
 
 function scheduleNote( tickNumber, time ) {
-
-    // handle the note
     if (!(resolution * tickNumber % 48 == 0)) return;
-
-    // create an oscillator
-    var osc = audioContext.createOscillator();
-    osc.connect( audioContext.destination );
-    if (tickNumber % 48 == 0 && halfNum % 2 == 0)
-        osc.frequency.value = 880.0;
-    else
-        osc.frequency.value = 440.0;
-
-    osc.start( time );
-    osc.stop( time + noteLength );
+    playSound(this.claves, time);
 }
 
 function scheduleBeat( time ) {
-    var osc = audioContext.createOscillator();
-    osc.connect( audioContext.destination );
-    osc.frequency.value = 440.0;
-    osc.start( time );
-    osc.stop( time + noteLength );
+    playSound(this.claves, time);
 }
 
 function scheduler() {
@@ -470,7 +546,9 @@ function init(){
 
     audioContext = new AudioContext();
 
-    // if we wanted to load audio files, etc., this is where we should do it.
+    // https://freewavesamples.com/claves
+    loadSounds(this, {claves: 'audio/Claves.wav'});
+
 
     // Build a worker from an anonymous function body
     var blobURL = URL.createObjectURL( new Blob([ '(',
