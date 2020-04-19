@@ -28,6 +28,21 @@ body {
     list-style-type: none;
 }
 
+#popup {
+    position: fixed;
+    margin: auto;
+    width: 80%;
+    left: 10%;
+    height: 80%;
+    top: 10%;
+    background-color: #eee;
+    border: solid 2px;
+}
+
+#popup button {
+    width: 100%;
+}
+
 .play, .add, .play2, .remove {
 	-moz-border-radius:20px;
 	-webkit-border-radius:20px;

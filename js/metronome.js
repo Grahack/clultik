@@ -26,6 +26,7 @@ var timerWorker = null;     // The Web Worker used to fire timer messages
 var storage = window.localStorage;
 var score = null;
 var list = null;
+var popup = null;
 
 var values = [,,
               "quarters",         // 2
@@ -246,10 +247,12 @@ function play() {
 }
 
 function playThis(event) {
-    var children = event.target.parentElement.childNodes;
-    tempo1 =   parseInt(children[2].value);
-    tempo2 =   parseInt(children[4].value);
-    duration = parseInt(children[6].value);
+    if(event) {  // can be null if we stop from the popup
+        var children = event.target.parentElement.childNodes;
+        tempo1 =   parseInt(children[2].value);
+        tempo2 =   parseInt(children[4].value);
+        duration = parseInt(children[6].value);
+    }
 
     if (!unlocked) {
       // play silent buffer to unlock the audio
@@ -268,11 +271,12 @@ function playThis(event) {
         mode = "list up";
         nextBeatTime = audioContext.currentTime;
         timerWorker.postMessage("start");
-        return "×";
+        popup.style.display = "block";
     } else {
         timerWorker.postMessage("stop");
-        return ">";
+        popup.style.display = "none";
     }
+    return ">";
 }
 
 function addEmpty() {
@@ -524,6 +528,7 @@ function init(){
 
     score = document.getElementById("score");
     list = document.getElementById("list");
+    popup = document.getElementById("popup");
     // fetch data from storage
     locStorageOK = localStorageTest();
     if (locStorageOK) {
