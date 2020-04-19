@@ -27,6 +27,10 @@ var storage = window.localStorage;
 var score = null;
 var list = null;
 var popup = null;
+var svg = null;
+var w = 800;
+var h = 600;
+var dot = null;
 
 var values = [,,
               "quarters",         // 2
@@ -184,12 +188,18 @@ function nextBeat() {
             mode = "list down";
             started = audioContext.currentTime;
         }
+        var adv = 1 - (tempo2-tempo)/(tempo2-tempo1);
+        dot.setAttribute('cx', 0.2*w + 0.2*w*adv);
+        dot.setAttribute('cy', 0.5*h - 0.3*h*adv);
     } else {
         tempo = tempo2 - dev;
         if (tempo <= tempo1) {
             mode = "list up";
             started = audioContext.currentTime;
         }
+        var adv = 1 - (tempo-tempo1)/(tempo2-tempo1);
+        dot.setAttribute('cx', 0.4*w + 0.2*w*adv);
+        dot.setAttribute('cy', 0.2*h + 0.3*h*adv);
     }
 }
 
@@ -529,6 +539,29 @@ function init(){
     score = document.getElementById("score");
     list = document.getElementById("list");
     popup = document.getElementById("popup");
+    svg = document.getElementById("svg");
+    w = window.innerWidth  || document.body.clientWidth;
+    h = window.innerHeight || document.body.clientHeight;
+    svg.setAttribute('viewBox', '0 0 ' + 0.8*w + ' ' + 0.7*h);
+    // draw the viz base
+    var newElement = document.createElementNS("http://www.w3.org/2000/svg",
+                                              'polyline');
+    var points = '' + 0.2*w + ',' + 0.5*h + ' '
+                    + 0.4*w + ',' + 0.2*h + ' '
+                    + 0.6*w + ',' + 0.5*h;
+    newElement.setAttribute('points', points);
+    newElement.style.fill = "none";
+    newElement.style.stroke = "#000";
+    newElement.style.strokeWidth = "5px";
+    newElement.style.strokeLinecap="round";
+    svg.appendChild(newElement);
+    // create the dot
+    dot = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    dot.setAttribute('cx', 0.2*w);
+    dot.setAttribute('cy', 0.5*h);
+    dot.setAttribute('r', 20);
+    dot.style.fill = "#000";
+    svg.appendChild(dot);
     // fetch data from storage
     locStorageOK = localStorageTest();
     if (locStorageOK) {
