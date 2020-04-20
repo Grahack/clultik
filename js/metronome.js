@@ -14,7 +14,7 @@ var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
                             // This is calculated from lookahead, and overlaps 
                             // with next interval (in case the timer is late)
 var nextTickTime = 0.0;     // when the next tick is due.
-var halfNum = 0;            // bar index, starting from 0
+var halfNum = 0;            // half note index, starting from 0
 var mode = "grid up";       // grid, list, up or down
 var resolution = 2;         // how many notes in two beats
 
