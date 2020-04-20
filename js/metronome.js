@@ -19,7 +19,7 @@ var mode = "grid up";       // grid, list, up or down
 var resolution = 2;         // how many notes in two beats
 
 var started;                // when starting an acceleration of en exercise
-var nextBeatTime = 0.0;    // when the next click is due.
+var nextBeatTime = 0.0;     // when the next click is due.
 
 var noteLength = 0.05;      // length of "beep" (in seconds)
 var timerWorker = null;     // The Web Worker used to fire timer messages
