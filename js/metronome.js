@@ -31,6 +31,9 @@ var svg = null;
 var w = 800;
 var h = 600;
 var dot = null;
+var tempoLabel = null;
+var tempoLabel1 = null;
+var tempoLabel2 = null;
 
 var values = [,,
               "quarters",         // 2
@@ -189,8 +192,8 @@ function nextBeat() {
             started = audioContext.currentTime;
         }
         var adv = 1 - (tempo2-tempo)/(tempo2-tempo1);
-        dot.setAttribute('cx', 0.2*w + 0.2*w*adv);
-        dot.setAttribute('cy', 0.5*h - 0.3*h*adv);
+        var x = 0.2*w + 0.2*w*adv;
+        var y = 0.5*h - 0.3*h*adv;
     } else {
         tempo = tempo2 - dev;
         if (tempo <= tempo1) {
@@ -198,9 +201,14 @@ function nextBeat() {
             started = audioContext.currentTime;
         }
         var adv = 1 - (tempo-tempo1)/(tempo2-tempo1);
-        dot.setAttribute('cx', 0.4*w + 0.2*w*adv);
-        dot.setAttribute('cy', 0.2*h + 0.3*h*adv);
+        var x = 0.4*w + 0.2*w*adv;
+        var y = 0.2*h + 0.3*h*adv;
     }
+    tempoLabel.innerHTML = parseInt(tempo);
+    dot.setAttribute('cx', x);
+    dot.setAttribute('cy', y);
+    tempoLabel.setAttribute('x', x-10);
+    tempoLabel.setAttribute('y', y-30);
 }
 
 function scheduleNote( tickNumber, time ) {
@@ -262,6 +270,9 @@ function playThis(event) {
         tempo1 =   parseInt(children[2].value);
         tempo2 =   parseInt(children[4].value);
         duration = parseInt(children[6].value);
+        tempoLabel.innerHTML = tempo;
+        tempoLabel1.innerHTML = tempo1;
+        tempoLabel2.innerHTML = tempo2;
     }
 
     if (!unlocked) {
@@ -562,6 +573,24 @@ function init(){
     dot.setAttribute('r', 20);
     dot.style.fill = "#000";
     svg.appendChild(dot);
+    // create the tempoLabel
+    tempoLabel = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    tempoLabel.setAttribute('x', 0.2*w);
+    tempoLabel.setAttribute('y', 0.45*h);
+    tempoLabel.innerHTML = tempo;
+    svg.appendChild(tempoLabel);
+    // create the tempoLabel1
+    tempoLabel1 = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    tempoLabel1.setAttribute('x', 0.2*w);
+    tempoLabel1.setAttribute('y', 0.55*h);
+    tempoLabel1.innerHTML = tempo1;
+    svg.appendChild(tempoLabel1);
+    // create the tempoLabel2
+    tempoLabel2 = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    tempoLabel2.setAttribute('x', 0.6*w);
+    tempoLabel2.setAttribute('y', 0.55*h);
+    tempoLabel2.innerHTML = tempo2;
+    svg.appendChild(tempoLabel2);
     // fetch data from storage
     locStorageOK = localStorageTest();
     if (locStorageOK) {
