@@ -15,8 +15,10 @@ var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
                             // with next interval (in case the timer is late)
 var nextTickTime = 0.0;     // when the next tick is due.
 var halfNum = 0;            // half note index, starting from 0
-var mode = "grid up";       // grid, list, up or down
-var resolution = 2;         // how many notes in two beats
+var mode = "grid";          // grid, list up or list down
+var resolutions =           // array of how many notes in two beats
+ [2, 2, 3, 3, 4, 4, 6, 6, 8, 8, 12, 12, 16, 16,
+  12, 12, 8, 8, 6, 6, 4, 4, 3, 3, 2, 2];
 
 var started;                // when starting an acceleration of en exercise
 var nextBeatTime = 0.0;     // when the next click is due.
@@ -25,6 +27,7 @@ var noteLength = 0.05;      // length of "beep" (in seconds)
 var timerWorker = null;     // The Web Worker used to fire timer messages
 var storage = window.localStorage;
 var score = null;
+var score2 = null;
 var list = null;
 var popup = null;
 var svg = null;
@@ -34,6 +37,7 @@ var dot = null;
 var tempoLabel = null;
 var tempoLabel1 = null;
 var tempoLabel2 = null;
+var tempoLabel1Bis = null;
 
 var values = [,,
               "quarters",         // 2
@@ -148,31 +152,18 @@ function nextTick() {
     if (currentTick == 48) {
         currentTick = 0;
         halfNum++;
-        if (halfNum == 4) {
+        if (halfNum == 2) {
             halfNum = 0;
-            if (mode == "grid up") {
-                if (resolution == 2) resolution = 3;
-                else if (resolution == 3) resolution = 4;
-                else if (resolution == 4) resolution = 6;
-                else if (resolution == 6) resolution = 8;
-                else if (resolution == 8) resolution = 12;
-                else if (resolution == 12) {
-                    resolution = 16;
-                    mode = "grid down";
-                }
+            resolutions.push(resolutions.shift());
+            score.src = 'img/' + resolutions[0] + '.png';
+            score.alt = values[resolutions[0]];
+            if (resolutions.length > 1) {
+                score2.src = 'img/' + resolutions[1] + '.png';
+                score2.alt = values[resolutions[1]];
             } else {
-                if (resolution == 16) resolution = 12;
-                else if (resolution == 12) resolution = 8;
-                else if (resolution == 8) resolution = 6;
-                else if (resolution == 6) resolution = 4;
-                else if (resolution == 4) resolution = 3;
-                else if (resolution == 3) {
-                    resolution = 2;
-                    mode = "grid up";
-                }
+                score2.src = 'img/' + resolutions[0] + '.png';
+                score2.alt = values[resolutions[0]];
             }
-            score.src = 'img/' + resolution + '.png';
-            score.alt = values[resolution];
         }
     }
 }
@@ -212,7 +203,7 @@ function nextBeat() {
 }
 
 function scheduleNote( tickNumber, time ) {
-    if (!(resolution * tickNumber % 48 == 0)) return;
+    if (!(resolutions[0] * tickNumber % 48 == 0)) return;
     playSound(this.claves, time);
 }
 
@@ -249,16 +240,13 @@ function play() {
     isPlaying = !isPlaying;
 
     if (isPlaying) { // start playing
+        mode = "grid";
         nextTickTime = audioContext.currentTime;
         timerWorker.postMessage("start");
         return "stop";
     } else {
-        mode = "grid up";
         currentTick = 0;
         halfNum = 0;
-        resolution = 2;
-        score.src = 'img/2.png';
-        score.alt = "quarters";
         timerWorker.postMessage("stop");
         return "play";
     }
@@ -548,6 +536,7 @@ function localStorageTest() {
 function init(){
 
     score = document.getElementById("score");
+    score2 = document.getElementById("score2");
     list = document.getElementById("list");
     popup = document.getElementById("popup");
     svg = document.getElementById("svg");
@@ -581,16 +570,22 @@ function init(){
     svg.appendChild(tempoLabel);
     // create the tempoLabel1
     tempoLabel1 = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-    tempoLabel1.setAttribute('x', 0.2*w);
+    tempoLabel1.setAttribute('x', 0.2*w - 10);
     tempoLabel1.setAttribute('y', 0.55*h);
     tempoLabel1.innerHTML = tempo1;
     svg.appendChild(tempoLabel1);
     // create the tempoLabel2
     tempoLabel2 = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-    tempoLabel2.setAttribute('x', 0.6*w);
-    tempoLabel2.setAttribute('y', 0.55*h);
+    tempoLabel2.setAttribute('x', 0.4*w - 10);
+    tempoLabel2.setAttribute('y', 0.25*h);
     tempoLabel2.innerHTML = tempo2;
     svg.appendChild(tempoLabel2);
+    // create the tempoLabel1Bis
+    tempoLabel1Bis = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    tempoLabel1Bis.setAttribute('x', 0.6*w - 10);
+    tempoLabel1Bis.setAttribute('y', 0.55*h);
+    tempoLabel1Bis.innerHTML = tempo1;
+    svg.appendChild(tempoLabel1Bis);
     // fetch data from storage
     locStorageOK = localStorageTest();
     if (locStorageOK) {
