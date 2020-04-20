@@ -16,9 +16,16 @@ var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
 var nextTickTime = 0.0;     // when the next tick is due.
 var halfNum = 0;            // half note index, starting from 0
 var mode = "grid";          // grid, list up or list down
-var resolutions =           // array of how many notes in two beats
- [2, 2, 3, 3, 4, 4, 6, 6, 8, 8, 12, 12, 16, 16,
-  12, 12, 8, 8, 6, 6, 4, 4, 3, 3, 2, 2];
+var resolutions = [2, 3]    // array of how many notes in two beats
+/* autres idées pour le code :
+Q   4   N
+Q3  43 3N
+E   8   C
+E3  3   T
+S  16   D
+S3 163  S
+Th 32   Tr
+*/
 
 var started;                // when starting an acceleration of en exercise
 var nextBeatTime = 0.0;     // when the next click is due.
@@ -155,15 +162,7 @@ function nextTick() {
         if (halfNum == 2) {
             halfNum = 0;
             resolutions.push(resolutions.shift());
-            score.src = 'img/' + resolutions[0] + '.png';
-            score.alt = values[resolutions[0]];
-            if (resolutions.length > 1) {
-                score2.src = 'img/' + resolutions[1] + '.png';
-                score2.alt = values[resolutions[1]];
-            } else {
-                score2.src = 'img/' + resolutions[0] + '.png';
-                score2.alt = values[resolutions[0]];
-            }
+            setScores();
         }
     }
 }
@@ -236,6 +235,9 @@ function play() {
       node.start(0);
       unlocked = true;
     }
+
+    setResolutions();
+    setScores();
 
     isPlaying = !isPlaying;
 
@@ -533,10 +535,29 @@ function localStorageTest() {
     }
 }
 
+function setResolutions() {
+    resolutions = document.getElementById('resoSrc').value.split(' ');
+}
+
+function setScores() {
+    score.src = 'img/' + resolutions[0] + '.png';
+    score.alt = values[resolutions[0]];
+    if (resolutions.length > 1) {
+        score2.src = 'img/' + resolutions[1] + '.png';
+        score2.alt = values[resolutions[1]];
+    } else {
+        score2.src = 'img/' + resolutions[0] + '.png';
+        score2.alt = values[resolutions[0]];
+    }
+}
+
 function init(){
 
     score = document.getElementById("score");
     score2 = document.getElementById("score2");
+    setResolutions();
+    setScores();
+
     list = document.getElementById("list");
     popup = document.getElementById("popup");
     svg = document.getElementById("svg");

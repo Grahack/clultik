@@ -24,6 +24,10 @@ body {
     width: 200px;
 }
 
+#resoSrc {
+	margin: 0.5em;
+}
+
 #list {
     list-style-type: none;
 }
