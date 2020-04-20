@@ -197,7 +197,7 @@ function nextBeat() {
     tempoLabel.innerHTML = parseInt(tempo);
     dot.setAttribute('cx', x);
     dot.setAttribute('cy', y);
-    tempoLabel.setAttribute('x', x-10);
+    tempoLabel.setAttribute('x', x);
     tempoLabel.setAttribute('y', y-30);
 }
 
@@ -585,25 +585,29 @@ function init(){
     svg.appendChild(dot);
     // create the tempoLabel
     tempoLabel = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    tempoLabel.setAttribute('text-anchor', 'middle');
     tempoLabel.setAttribute('x', 0.2*w);
     tempoLabel.setAttribute('y', 0.45*h);
     tempoLabel.innerHTML = tempo;
     svg.appendChild(tempoLabel);
     // create the tempoLabel1
     tempoLabel1 = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-    tempoLabel1.setAttribute('x', 0.2*w - 10);
+    tempoLabel1.setAttribute('text-anchor', 'middle');
+    tempoLabel1.setAttribute('x', 0.2*w);
     tempoLabel1.setAttribute('y', 0.55*h);
     tempoLabel1.innerHTML = tempo1;
     svg.appendChild(tempoLabel1);
     // create the tempoLabel2
     tempoLabel2 = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-    tempoLabel2.setAttribute('x', 0.4*w - 10);
+    tempoLabel2.setAttribute('text-anchor', 'middle');
+    tempoLabel2.setAttribute('x', 0.4*w);
     tempoLabel2.setAttribute('y', 0.25*h);
     tempoLabel2.innerHTML = tempo2;
     svg.appendChild(tempoLabel2);
     // create the tempoLabel1Bis
     tempoLabel1Bis = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-    tempoLabel1Bis.setAttribute('x', 0.6*w - 10);
+    tempoLabel1Bis.setAttribute('text-anchor', 'middle');
+    tempoLabel1Bis.setAttribute('x', 0.6*w);
     tempoLabel1Bis.setAttribute('y', 0.55*h);
     tempoLabel1Bis.innerHTML = tempo1;
     svg.appendChild(tempoLabel1Bis);
