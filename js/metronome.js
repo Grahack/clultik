@@ -263,6 +263,7 @@ function playThis(event) {
         tempoLabel.innerHTML = tempo;
         tempoLabel1.innerHTML = tempo1;
         tempoLabel2.innerHTML = tempo2;
+        tempoLabel1Bis.innerHTML = tempo1;
     }
 
     if (!unlocked) {
