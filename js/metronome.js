@@ -325,6 +325,7 @@ function sort() {
     clicksArray.sort(compareClicks);
     list.innerHTML = '';
     clicksArray.forEach(function (elt) {list.append(elt)});
+    alert("Sorted!");
 }
 
 function compareClicks(a, b) {
