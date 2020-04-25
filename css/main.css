@@ -101,3 +101,7 @@ body {
 	display: inline-block;
 	width: 45px; 
 }
+
+code {
+    font-size: 140%;
+}
