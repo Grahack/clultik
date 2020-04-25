@@ -93,9 +93,13 @@ function filter(event) {
 
 function playSound(buffer, time) {
     if (sound == 'Bip') {
+        var g = audioContext.createGain();
+        g.connect(audioContext.destination);
         var osc = audioContext.createOscillator();
-        osc.connect(audioContext.destination);
+        osc.connect(g);
         osc.frequency.value = 440.0;
+        g.gain.linearRampToValueAtTime(1, time);
+        g.gain.linearRampToValueAtTime(0, time + noteLength);
         osc.start(time);
         osc.stop(time + noteLength);
     } else {
