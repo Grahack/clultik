@@ -7,6 +7,7 @@ var currentTick = 0;        // What tick is currently last scheduled?
 var tempo = 60.0;           // tempo (in beats per minute)
 var tempo1 = 60;            // tempo (in beats per minute)
 var tempo2 = 60;            // tempo (in beats per minute)
+var sound = 'Bip';
 var duration = 60;          // tempo (in beats per minute)
 var lookahead = 25.0;       // How frequently to call scheduling function 
                             //(in milliseconds)
@@ -71,11 +72,24 @@ window.requestAnimFrame = (function(){
   };
 })();
 
+function soundChange(event) {
+    sound = event.target.value.split(' ')[0];
+    console.log("Switching to " + sound);
+}
+
 function playSound(buffer, time) {
-  var source = context.createBufferSource();
-  source.buffer = buffer;
-  source.connect(context.destination);
-  source[source.start ? 'start' : 'noteOn'](time);
+    if (sound == 'Bip') {
+        var osc = audioContext.createOscillator();
+        osc.connect(audioContext.destination);
+        osc.frequency.value = 440.0;
+        osc.start(time);
+        osc.stop(time + noteLength);
+    } else {
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source[source.start ? 'start' : 'noteOn'](time);
+    }
 }
 
 function loadSounds(obj, soundMap, callback) {
@@ -612,6 +626,11 @@ function init(){
     tempoLabel1Bis.setAttribute('y', 0.55*h);
     tempoLabel1Bis.innerHTML = tempo1;
     svg.appendChild(tempoLabel1Bis);
+
+    // config
+    var soundElt = document.getElementById('sound');
+    soundElt.onchange = soundChange;
+
     // fetch data from storage
     locStorageOK = localStorageTest();
     if (locStorageOK) {
