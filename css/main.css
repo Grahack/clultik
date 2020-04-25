@@ -102,6 +102,10 @@ body {
 	width: 45px; 
 }
 
+#filter {
+    margin-bottom: 1em;
+}
+
 code {
     font-size: 140%;
 }

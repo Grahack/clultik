@@ -77,6 +77,20 @@ function soundChange(event) {
     console.log("Switching to " + sound);
 }
 
+function filter(event) {
+    var f = event.target.value.toLowerCase().trim();
+    console.log("Filtering with " + f);
+    var clicksArray = Array.prototype.slice.call(list.childNodes, 0);
+    clicksArray.forEach(function (elt) {
+        var title = elt.childNodes[1].value.toLowerCase();
+        if (f != '' && title.indexOf(f) === -1) {
+            elt.style.display = 'none';
+        } else {
+            elt.style.display = 'block';
+        }
+    });
+}
+
 function playSound(buffer, time) {
     if (sound == 'Bip') {
         var osc = audioContext.createOscillator();
@@ -580,6 +594,8 @@ function init(){
     w = window.innerWidth  || document.body.clientWidth;
     h = window.innerHeight || document.body.clientHeight;
     svg.setAttribute('viewBox', '0 0 ' + 0.8*w + ' ' + 0.7*h);
+    var filterElt = document.getElementById('filter');
+    filterElt.onkeyup = filter;
     // draw the viz base
     var newElement = document.createElementNS("http://www.w3.org/2000/svg",
                                               'polyline');
