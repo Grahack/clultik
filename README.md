@@ -1,9 +1,11 @@
-# Web Audio Metronome
+# Web Audio Multi Metronome
 
-This application shows how to use a collaboration between a setTimeout scheduler and the Web Audio scheduler to properly implement rock-solid timing for audio applications.
+This application has to purposes :
+
+* help you to hear and play note values switches, like from eights to
+  eights triplets
+* maintain a list of BPMs for you favorite musical exercises.
 
 Check it out, feel free to submit issues or requests, fork, submit pull requests, etc.
 
-The live app is at http://webaudiodemos.appspot.com/metronome/index.html.
-
--Chris
+The live app is at https://grahack.github.io/clultik/.
