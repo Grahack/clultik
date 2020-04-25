@@ -324,7 +324,7 @@ function sort() {
     var clicksArray = Array.prototype.slice.call(list.childNodes, 0);
     clicksArray.sort(compareClicks);
     list.innerHTML = '';
-    clicksArray.forEach(function (elt) {list.append(elt)});
+    clicksArray.forEach(function (elt) {list.append(elt);});
     alert("Sorted!");
 }
 
@@ -395,7 +395,7 @@ function _save() {
 
 function parseImport(str) {
     var clicks = [];
-    str.trim().split('\n').forEach(function (elt) {clicks.push(elt)});
+    str.trim().split('\n').forEach(function (elt) {clicks.push(elt);});
     clicks.reverse();  // because our add function prepends
     clicks = clicks.map(function (elt) {
         var s = elt.split(':');
