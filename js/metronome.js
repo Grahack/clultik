@@ -327,6 +327,7 @@ function addEmpty() {
     var data = {'title': "le titre",
                 'tempo1': 80, 'tempo2': 100, 'duration': 60};
     add(data);
+    list.childNodes[0].childNodes[1].select();
 }
 
 function numElem(data, key) {
