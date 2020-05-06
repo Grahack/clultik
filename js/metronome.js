@@ -8,7 +8,7 @@ var tempo = 60.0;           // tempo (in beats per minute)
 var tempo1 = 60;            // tempo (in beats per minute)
 var tempo2 = 60;            // tempo (in beats per minute)
 var sound = 'Bip';
-var duration = 60;          // tempo (in beats per minute)
+var duration = 60;          // time taken by half a cycle in list mode
 var lookahead = 25.0;       // How frequently to call scheduling function 
                             //(in milliseconds)
 var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
@@ -28,7 +28,7 @@ S3 163  S
 Th 32   Tr
 */
 
-var started;                // when starting an acceleration of en exercise
+var started;                // when starting an acceleration of an exercise
 var nextBeatTime = 0.0;     // when the next click is due.
 
 var noteLength = 0.05;      // length of "beep" (in seconds)
