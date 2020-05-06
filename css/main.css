@@ -47,6 +47,10 @@ body {
     width: 100%;
 }
 
+#popup-docs {
+    text-align: center;
+}
+
 .play, .add, .play2, .remove {
 	-moz-border-radius:20px;
 	-webkit-border-radius:20px;

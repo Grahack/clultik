@@ -722,6 +722,28 @@ function init(){
             console.log("message: " + e.data);
     };
     timerWorker.postMessage({"interval":lookahead});
+
+    document.getElementsByTagName('body')[0].onkeydown = function(e) {
+        if (!isPlaying) return;
+        e = e || window.event;
+        if (e.which == 32) playThis();  // which means stop, sorry
+        if (e.which == 37) {  // left
+            mode = "list up";
+            started = audioContext.currentTime - duration/2;
+        };
+        if (e.which == 38) {  // top
+            mode = "list down";
+            started = audioContext.currentTime;
+        };
+        if (e.which == 39) {  // right
+            mode = "list down";
+            started = audioContext.currentTime - duration/2;
+        };
+        if (e.which == 40) {  // bottom
+            mode = "list up";
+            started = audioContext.currentTime;
+        };
+    };
 }
 
 window.addEventListener("load", init );
