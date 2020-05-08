@@ -726,6 +726,7 @@ function init(){
     document.getElementsByTagName('body')[0].onkeydown = function(e) {
         if (!isPlaying) return;
         e = e || window.event;
+        e.preventDefault();
         if (e.which == 32) playThis();  // which means stop, sorry
         if (e.which == 37) {  // left
             mode = "list up";
