@@ -7,16 +7,15 @@ body {
 }
 
 #controls {
-	font-family:arial;
-	font-size:24px;
-	font-weight:bold;
-	margin: 15px;
+    font-family:arial;
+    font-size:24px;
+    font-weight:bold;
+    margin: 15px;
 }
 
 #controls * {
-	margin: 5px;
-	display:inline-block;
-	
+    margin: 5px;
+    display:inline-block;
 }
 
 #tempoBox input {
@@ -25,7 +24,7 @@ body {
 }
 
 #resoSrc {
-	margin: 0.5em;
+    margin: 0.5em;
 }
 
 #list {
@@ -52,48 +51,48 @@ body {
 }
 
 .play, .add, .play2, .remove {
-	-moz-border-radius:20px;
-	-webkit-border-radius:20px;
-	border-radius:20px;
-	color:#ffffff;
-	text-decoration:none;
-	text-shadow:1px 1px 6px #000000;
-	text-align: center;
+    -moz-border-radius:20px;
+    -webkit-border-radius:20px;
+    border-radius:20px;
+    color:#ffffff;
+    text-decoration:none;
+    text-shadow:1px 1px 6px #000000;
+    text-align: center;
 }
 
 .play, .play2 {
-	background-color:#79bbff;
+    background-color:#79bbff;
 }
 
 .play {
-	padding: 8px 24px;
+    padding: 8px 24px;
 }
 
 .play2 {
-	padding: 2px 12px;
+    padding: 2px 12px;
     margin-right: 1em;
 }
 
 .add {
-	padding: 2px 12px;
+    padding: 2px 12px;
     background-color: #3c3;
 }
 
 .remove {
-	padding: 2px 12px;
+    padding: 2px 12px;
     margin-left: 1em;
     background-color: #f99;
 }
 
 .play:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
-	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
-	background-color:#378de5;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+    background-color:#378de5;
 }
 
 .play:active {
-	position:relative;
-	top:1px; left: 1px;
+    position:relative;
+    top:1px; left: 1px;
 }
 
 .num-elem {
@@ -102,8 +101,8 @@ body {
 }
 
 #showTempo { 
-	display: inline-block;
-	width: 45px; 
+    display: inline-block;
+    width: 45px;
 }
 
 #filter {
