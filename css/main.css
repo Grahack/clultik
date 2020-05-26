@@ -58,6 +58,7 @@ body {
     text-decoration:none;
     text-shadow:1px 1px 6px #000000;
     text-align: center;
+    cursor: pointer;
 }
 
 .play, .play2 {
